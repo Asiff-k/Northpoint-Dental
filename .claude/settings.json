@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npm install *)",
+      "Bash(npm i *)",
+      "Bash(npx shadcn@latest *)",
+      "Bash(npx tsx *)",
+      "Bash(npx vitest *)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git log *)",
+      "mcp__playwright"
+    ],
+    "deny": [
+      "Read(./.env.local)",
+      "Read(./.env)",
+      "Bash(git push --force *)",
+      "Bash(rm -rf /*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true
+}
