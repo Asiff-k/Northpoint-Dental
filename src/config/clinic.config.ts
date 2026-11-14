@@ -35,7 +35,7 @@ export interface Dentist {
   languages: string[];
   specialties: string[];
   bio: string;
-  photo: string; // path under /public/images/team
+  photo: string; // Unsplash portrait URL, credited in public/images/CREDITS.md
   /** Weekly working pattern used by the booking engine. */
   availability: { day: Weekday; start: string; end: string }[];
 }
@@ -187,7 +187,7 @@ export const dentists: Dentist[] = [
     languages: ["English"],
     specialties: ["Cosmetic dentistry", "Nervous patients", "Crowns"],
     bio: "Sarah founded Northpoint to make dentistry feel calm and unhurried. She is known for gentle care and clear, no-pressure treatment plans.",
-    photo: "/images/team/sarah-mitchell.jpg",
+    photo: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&crop=faces&w=800&h=1000&q=75",
     availability: [
       { day: "mon", start: "09:00", end: "17:00" },
       { day: "tue", start: "09:00", end: "19:30" },
@@ -204,7 +204,7 @@ export const dentists: Dentist[] = [
     languages: ["English", "Gujarati", "Hindi"],
     specialties: ["Composite bonding", "Root canal", "Emergencies"],
     bio: "James focuses on conservative dentistry and same-day emergency care, and loves turning a worried first visit into a relaxed one.",
-    photo: "/images/team/james-patel.jpg",
+    photo: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&crop=faces&w=800&h=1000&q=75",
     availability: [
       { day: "mon", start: "08:30", end: "17:30" },
       { day: "wed", start: "08:30", end: "17:30" },
@@ -221,7 +221,7 @@ export const dentists: Dentist[] = [
     languages: ["English", "Italian"],
     specialties: ["Clear aligners", "Dental implants", "Complex root canal"],
     bio: "Elena is a referral-level clinician for aligners and implants, using digital scans to show patients their result before treatment starts.",
-    photo: "/images/team/elena-rossi.jpg",
+    photo: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=facearea&facepad=2.6&w=800&h=1000&q=75",
     availability: [
       { day: "tue", start: "09:00", end: "17:00" },
       { day: "wed", start: "09:00", end: "17:00" },
@@ -237,7 +237,7 @@ export const dentists: Dentist[] = [
     languages: ["English"],
     specialties: ["Airflow cleaning", "Gum health", "Whitening"],
     bio: "Emma's hygiene visits are famously gentle. She uses Airflow polishing and explains every step so there are no surprises.",
-    photo: "/images/team/emma-clarke.jpg",
+    photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&crop=faces&w=800&h=1000&q=75",
     availability: [
       { day: "mon", start: "08:30", end: "17:30" },
       { day: "tue", start: "12:00", end: "19:30" },
@@ -390,7 +390,224 @@ export const intents = [
   { label: "Fix a chipped tooth", serviceSlug: "composite-bonding" },
 ] as const;
 
+// ---- site content ---------------------------------------------------------
+
+const unsplash = (id: string, w: number, h: number, faces = false) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop${faces ? "&crop=faces" : ""}&w=${w}&h=${h}&q=75`;
+
+/** Sample imagery. Every photo is logged in public/images/CREDITS.md. */
+export const images = {
+  hero: {
+    src: unsplash("1629909613654-28e377c37b09", 1400, 1500),
+    alt: "A bright, calm treatment room at the clinic",
+  },
+  about: {
+    src: unsplash("1629909615184-74f495363b67", 1600, 1000),
+    alt: "The open-plan treatment area with natural light",
+  },
+  rooms: [
+    {
+      src: unsplash("1629909613654-28e377c37b09", 900, 700),
+      alt: "Treatment room one, white and light filled",
+    },
+    {
+      src: unsplash("1598256989800-fe5f95da9787", 900, 700),
+      alt: "Treatment room two with warm wooden details",
+    },
+    {
+      src: unsplash("1629909615184-74f495363b67", 900, 700),
+      alt: "The hygiene suite",
+    },
+  ],
+  technology: {
+    src: unsplash("1606811841689-23dfddce3e95", 1200, 900),
+    alt: "A dentist talking a patient through their scan on screen",
+  },
+} as const;
+
+export const nav = [
+  { label: "Services", href: "/services" },
+  { label: "Dentists", href: "/dentists" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+] as const;
+
+export const hero = {
+  eyebrow: "Welcoming new patients in Leeds",
+  subhead:
+    "Choose your dentist, see every price before you book, and reserve a time in under a minute.",
+  intentLabel: "I would like to...",
+  primaryCta: "Book an appointment",
+  secondaryCta: "Ask Ava",
+  consultationCta: "Or book a free 15-min consultation",
+} as const;
+
+export const whyChooseUs = [
+  {
+    icon: "HeartHandshake",
+    title: "Nervous patients welcome",
+    text: "Longer first visits, every step explained, and you can pause at any time.",
+  },
+  {
+    icon: "CalendarClock",
+    title: "Evening and Saturday appointments",
+    text: "Open until 20:00 on Tuesdays and Thursdays, and Saturday mornings.",
+  },
+  {
+    icon: "Siren",
+    title: "Same-day emergencies",
+    text: "We hold emergency slots back every day so you are not left in pain.",
+  },
+  {
+    icon: "ReceiptPoundSterling",
+    title: "Transparent per-dentist pricing",
+    text: "Every clinician's fee is published. The price you see is the price you pay.",
+  },
+  {
+    icon: "Percent",
+    title: "0% finance",
+    text: "Spread treatment over £500 across 6 to 24 months, interest free.",
+  },
+  {
+    icon: "ScanLine",
+    title: "Modern technology",
+    text: "Digital X-rays, 3D intraoral scanning and Airflow polishing as standard.",
+  },
+] as const;
+
+export const bookingSteps = [
+  {
+    title: "Choose your treatment",
+    text: "Pick a service, or start with a free 15-minute consultation.",
+  },
+  {
+    title: "Pick your dentist and time",
+    text: "See each clinician's price and live availability, then choose a slot.",
+  },
+  {
+    title: "Get instant confirmation",
+    text: "Your booking is confirmed by email, with a link to change or cancel.",
+  },
+] as const;
+
+/**
+ * Before and after sliders. Illustrative only: one calm portrait per
+ * treatment, with the "before" side muted in CSS. No clinical photography.
+ */
+export const beforeAfter = [
+  {
+    treatment: "Teeth whitening",
+    serviceSlug: "teeth-whitening",
+    caption: "A brighter, even shade in 2 to 3 weeks.",
+    image: unsplash("1494790108377-be9c29b29330", 900, 1000, true),
+    alt: "Portrait of a smiling woman",
+  },
+  {
+    treatment: "Composite bonding",
+    serviceSlug: "composite-bonding",
+    caption: "Chips and gaps reshaped in a single visit.",
+    image: unsplash("1500648767791-00dcc994a43e", 900, 1000, true),
+    alt: "Portrait of a man with a relaxed smile",
+  },
+  {
+    treatment: "Clear aligners",
+    serviceSlug: "aligner-consultation",
+    caption: "Straighter teeth with discreet, removable aligners.",
+    image: unsplash("1544005313-94ddf0286df2", 900, 1000, true),
+    alt: "Portrait of a woman looking calmly at the camera",
+  },
+] as const;
+
+export const about = {
+  headline: "Dentistry that feels calm, clear and unhurried",
+  intro:
+    "Northpoint opened on Park Square with one idea: a dental visit should feel as considered as the treatment itself.",
+  story: [
+    "Dr Sarah Mitchell founded the practice after years of seeing patients put off care because they felt rushed, judged or unsure what things would cost. Northpoint was designed to remove each of those worries.",
+    "Appointments are longer. Every fee is published for every clinician. You choose who you see, and you can book, move or cancel online without picking up the phone.",
+    "Today our team of four looks after families, professionals and plenty of people who thought they would never enjoy visiting a dentist.",
+  ],
+  values: [
+    { title: "Unhurried", text: "Longer appointments so nothing feels rushed." },
+    { title: "Transparent", text: "Published prices for every dentist and treatment." },
+    { title: "Gentle", text: "A team chosen for kindness as much as skill." },
+  ],
+  technology: [
+    {
+      icon: "Radiation",
+      title: "Digital X-rays",
+      text: "Low-dose images in seconds, shown on screen so you can see what we see.",
+    },
+    {
+      icon: "ScanFace",
+      title: "Intraoral 3D scanner",
+      text: "No putty impressions. A quick scan builds a precise 3D model of your teeth.",
+    },
+    {
+      icon: "Wind",
+      title: "Airflow polishing",
+      text: "Warm water and fine powder lift staining gently, with no scraping.",
+    },
+  ],
+  accreditations: [
+    {
+      name: "General Dental Council",
+      short: "GDC",
+      text: "Every clinician is registered with the GDC. Registration numbers are shown on each profile.",
+    },
+    {
+      name: "Care Quality Commission",
+      short: "CQC",
+      text: "The practice is regulated by the CQC, the independent regulator of health care in England.",
+    },
+  ],
+} as const;
+
 // ---- helpers --------------------------------------------------------------
+
+/** GDC number without the "(sample)" marker. Show a Sample tag when isDemo. */
+export const gdcDisplay = (d: Dentist) =>
+  d.gdcNumber.replace(/\s*\(sample\)/i, "");
+
+/** "Dr Patel" for dentists, first name for the rest of the team. */
+export const shortName = (d: Dentist) => {
+  const parts = d.name.split(" ");
+  return parts[0] === "Dr" ? `Dr ${parts[parts.length - 1]}` : parts[0];
+};
+
+export const getService = (slug: string) => services.find((s) => s.slug === slug);
+
+export const getDentist = (slug: string) => dentists.find((d) => d.slug === slug);
+
+export const maxPrice = (s: Service) => Math.max(...Object.values(s.prices));
+
+/** Finance applies only to eligible services at or above the minimum spend. */
+export const financeApplies = (s: Service, pence: number) =>
+  clinic.finance.enabled &&
+  Boolean(s.financeEligible) &&
+  pence >= clinic.finance.minSpendPence;
+
+export const longestFinanceTerm = () => Math.max(...clinic.finance.terms);
+
+export const categoryLabels: Record<ServiceCategory, string> = {
+  general: "General",
+  hygiene: "Hygiene",
+  cosmetic: "Cosmetic",
+  restorative: "Restorative",
+  orthodontics: "Orthodontics",
+  emergency: "Emergency",
+};
+
+export const weekdayLabels: Record<Weekday, { short: string; long: string }> = {
+  mon: { short: "Mon", long: "Monday" },
+  tue: { short: "Tue", long: "Tuesday" },
+  wed: { short: "Wed", long: "Wednesday" },
+  thu: { short: "Thu", long: "Thursday" },
+  fri: { short: "Fri", long: "Friday" },
+  sat: { short: "Sat", long: "Saturday" },
+  sun: { short: "Sun", long: "Sunday" },
+};
 
 export const formatPrice = (pence: number) =>
   new Intl.NumberFormat("en-GB", {
