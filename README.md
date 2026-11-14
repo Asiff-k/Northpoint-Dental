@@ -11,9 +11,8 @@ Premium UK dental clinic website template: AI booking assistant, in-site booking
    ```
    Open http://localhost:3000. You should see the "Phase 0 ready" page listing dentists and prices.
 2. Copy `.env.example` to `.env.local` (fill keys later, phase by phase).
-3. Put it on GitHub:
+3. Put it on GitHub (git is already initialised with a first commit):
    ```bash
-   git add -A && git commit -m "chore: starter kit"
    gh repo create northpoint-dental --private --source=. --push
    ```
 4. Start Claude Code in this folder:
