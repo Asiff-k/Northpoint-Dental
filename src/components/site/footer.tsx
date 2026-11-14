@@ -14,7 +14,7 @@ export function Footer() {
   const { address, contact } = clinic;
 
   return (
-    <footer className="bg-primary pb-[4.5rem] text-white/75 md:pb-0">
+    <footer data-toast-avoid className="bg-primary pb-[4.5rem] text-white/75 md:pb-0">
       <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.3fr_1.2fr_0.8fr_0.9fr] lg:gap-12">
         <div>
           <Logo tone="dark" />

@@ -101,6 +101,12 @@ function Wizard({ initial }: { initial: Initial }) {
     !initial.service ? 1 : !initialDentist ? 2 : 3,
   );
   const [isNewPatient, setIsNewPatient] = useState(true);
+  // Kept in state so details survive a round trip to the final screen.
+  const [details, setDetails] = useState({ name: "", email: "", phone: "", note: "" });
+  const [consent, setConsent] = useState(false);
+  const setDetail = (key: keyof typeof details) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => setDetails((d) => ({ ...d, [key]: e.target.value }));
   const [submitted, setSubmitted] = useState(false);
 
   const isConsultation = serviceSlug === CONSULTATION;
@@ -470,16 +476,16 @@ function Wizard({ initial }: { initial: Initial }) {
               >
                 <div className="grid gap-2">
                   <Label htmlFor="bk-name">Full name</Label>
-                  <Input id="bk-name" name="name" autoComplete="name" required />
+                  <Input id="bk-name" name="name" autoComplete="name" required value={details.name} onChange={setDetail("name")} />
                 </div>
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div className="grid gap-2">
                     <Label htmlFor="bk-email">Email</Label>
-                    <Input id="bk-email" name="email" type="email" autoComplete="email" required />
+                    <Input id="bk-email" name="email" type="email" autoComplete="email" required value={details.email} onChange={setDetail("email")} />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="bk-phone">Mobile number</Label>
-                    <Input id="bk-phone" name="phone" type="tel" autoComplete="tel" required />
+                    <Input id="bk-phone" name="phone" type="tel" autoComplete="tel" required value={details.phone} onChange={setDetail("phone")} />
                   </div>
                 </div>
 
@@ -513,11 +519,18 @@ function Wizard({ initial }: { initial: Initial }) {
                     Anything we should know?{" "}
                     <span className="font-normal text-muted-foreground">(optional)</span>
                   </Label>
-                  <Textarea id="bk-note" name="note" rows={3} />
+                  <Textarea id="bk-note" name="note" rows={3} value={details.note} onChange={setDetail("note")} />
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Checkbox id="bk-consent" name="consent" required className="mt-0.5" />
+                  <Checkbox
+                    id="bk-consent"
+                    name="consent"
+                    required
+                    checked={consent}
+                    onCheckedChange={(value) => setConsent(value === true)}
+                    className="mt-0.5"
+                  />
                   <Label htmlFor="bk-consent" className="block text-sm leading-relaxed font-normal text-muted-foreground">
                     I agree to {clinic.name} using these details to manage my
                     appointment, as described in the{" "}

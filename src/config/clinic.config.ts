@@ -187,7 +187,7 @@ export const dentists: Dentist[] = [
     languages: ["English"],
     specialties: ["Cosmetic dentistry", "Nervous patients", "Crowns"],
     bio: "Sarah founded Northpoint to make dentistry feel calm and unhurried. She is known for gentle care and clear, no-pressure treatment plans.",
-    photo: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&crop=faces&w=800&h=1000&q=75",
+    photo: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&crop=faces&w=800&h=1000&q=75",
     availability: [
       { day: "mon", start: "09:00", end: "17:00" },
       { day: "tue", start: "09:00", end: "19:30" },
@@ -221,7 +221,7 @@ export const dentists: Dentist[] = [
     languages: ["English", "Italian"],
     specialties: ["Clear aligners", "Dental implants", "Complex root canal"],
     bio: "Elena is a referral-level clinician for aligners and implants, using digital scans to show patients their result before treatment starts.",
-    photo: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=facearea&facepad=2.6&w=800&h=1000&q=75",
+    photo: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&crop=faces&w=800&h=1000&q=75",
     availability: [
       { day: "tue", start: "09:00", end: "17:00" },
       { day: "wed", start: "09:00", end: "17:00" },

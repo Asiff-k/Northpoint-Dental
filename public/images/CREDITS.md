@@ -24,13 +24,16 @@ image with the clinic's own photography.
 ## Team portraits
 
 Stock portraits of models. They are not the people named on the site, who are
-fictional.
+fictional. Each portrait was viewed at the size the site serves it (800 x 1000)
+to confirm no name, logo or badge is visible. Two earlier picks were replaced
+for that reason: photo-1594824476967-48c8b964273f (name embroidered on scrubs)
+and photo-1559839734-2b71ea197ec2 (emblem on coat pocket). Do not reuse them.
 
 | Used for | Config key | Image URL |
 | --- | --- | --- |
-| Dr Sarah Mitchell | `dentists[0].photo` | https://images.unsplash.com/photo-1559839734-2b71ea197ec2 |
+| Dr Sarah Mitchell | `dentists[0].photo` | https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e |
 | Dr James Patel | `dentists[1].photo` | https://images.unsplash.com/photo-1612349317150-e413f6a5b16d |
-| Dr Elena Rossi | `dentists[2].photo` | https://images.unsplash.com/photo-1594824476967-48c8b964273f |
+| Dr Elena Rossi | `dentists[2].photo` | https://images.unsplash.com/photo-1607746882042-944635dfe10e |
 | Emma Clarke | `dentists[3].photo` | https://images.unsplash.com/photo-1580489944761-15a19d654956 |
 
 ## Before and after (illustrative)

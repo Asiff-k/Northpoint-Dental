@@ -16,7 +16,7 @@ export function FinalCta({
   bookLabel?: string;
 }) {
   return (
-    <section className="py-12 md:py-20">
+    <section data-toast-avoid className="py-12 md:py-20">
       <Container>
         <div className="relative overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-center sm:px-12 md:py-16">
           <div
