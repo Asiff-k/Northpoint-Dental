@@ -221,7 +221,7 @@ export const dentists: Dentist[] = [
     languages: ["English", "Italian"],
     specialties: ["Clear aligners", "Dental implants", "Complex root canal"],
     bio: "Elena is a referral-level clinician for aligners and implants, using digital scans to show patients their result before treatment starts.",
-    photo: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&crop=faces&w=800&h=1000&q=75",
+    photo: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&crop=faces&w=800&h=1000&q=75",
     availability: [
       { day: "tue", start: "09:00", end: "17:00" },
       { day: "wed", start: "09:00", end: "17:00" },

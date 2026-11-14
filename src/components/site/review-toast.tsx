@@ -6,22 +6,20 @@ import { Star, X } from "lucide-react";
 import type { Review } from "@/config/clinic.config";
 import { SampleTag } from "@/components/ui/sample-tag";
 
-const ROTATE_MS = 8000;
-/** At this width and above the toast is always allowed. */
-const WIDE_SCREEN_PX = 1536;
+const VISIBLE_MS = 6000;
+const HIDDEN_MS = 20000;
+const TICK_MS = 250;
 
 const isRendered = (el: Element) => el.getClientRects().length > 0;
 
 /**
- * Whether the toast may show right now.
- * Below 1536px it has to stay out of the way: only after the visitor has
- * scrolled past the page hero (the first section in <main>), and never while
- * the final CTA or the footer is on screen. Those are marked with
- * [data-toast-avoid]. Hidden routes kept alive by <Activity> are skipped.
+ * Whether the toast may show right now, at any screen width.
+ * It stays out of the way: only after the visitor has scrolled past the page
+ * hero (the first section in <main>), and never while the final CTA or the
+ * footer is on screen. Those are marked with [data-toast-avoid]. Hidden
+ * routes kept alive by <Activity> are skipped.
  */
 function canShowToast() {
-  if (window.innerWidth >= WIDE_SCREEN_PX) return true;
-
   const hero = [...document.querySelectorAll("main section")].find(isRendered);
   if (!hero || hero.getBoundingClientRect().bottom > 0) return false;
 
@@ -43,24 +41,42 @@ const subscribe = (onChange: () => void) => {
   };
 };
 
-/** Rotating review toast, bottom-left. Desktop only, pauses on hover. */
+/**
+ * Review toast, bottom-left, desktop only.
+ * Timed cycle: visible for 6 s, hidden for 20 s, then the next review.
+ * The timer pauses on hover or focus, and only runs while the toast is
+ * allowed on screen, so the first review appears as soon as the visitor
+ * scrolls past the hero.
+ */
 export function ReviewToast({ reviews }: { reviews: Review[] }) {
-  const [index, setIndex] = useState(0);
+  const [cycle, setCycle] = useState({ index: 0, visible: true });
   const [dismissed, setDismissed] = useState(false);
   const paused = useRef(false);
+  const elapsed = useRef(0);
+  const cycleRef = useRef(cycle);
   const allowed = useSyncExternalStore(subscribe, canShowToast, () => false);
 
-  const active = allowed && !dismissed && reviews.length > 0;
+  const running = allowed && !dismissed && reviews.length > 0;
 
   useEffect(() => {
-    if (!active) return;
-    const rotate = window.setInterval(() => {
-      if (!paused.current) setIndex((i) => (i + 1) % reviews.length);
-    }, ROTATE_MS);
-    return () => window.clearInterval(rotate);
-  }, [active, reviews.length]);
+    if (!running) return;
+    const timer = window.setInterval(() => {
+      if (paused.current) return;
+      elapsed.current += TICK_MS;
+      const current = cycleRef.current;
+      if (elapsed.current < (current.visible ? VISIBLE_MS : HIDDEN_MS)) return;
 
-  const review = active ? reviews[index] : null;
+      elapsed.current = 0;
+      const next = current.visible
+        ? { index: current.index, visible: false }
+        : { index: (current.index + 1) % reviews.length, visible: true };
+      cycleRef.current = next;
+      setCycle(next);
+    }, TICK_MS);
+    return () => window.clearInterval(timer);
+  }, [running, reviews.length]);
+
+  const review = running && cycle.visible ? reviews[cycle.index] : null;
 
   return (
     <div
