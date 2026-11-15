@@ -1,8 +1,9 @@
 /**
  * Northpoint Dental: single source of truth for the demo clinic.
  *
- * Every page, the chatbot and the booking engine read from this file
- * (Phase 1) and later from Supabase, seeded from this file (Phase 2).
+ * Supabase is seeded from this file (`npm run seed`). Dentists, services and
+ * prices are read through src/lib/data.ts, which falls back to this file
+ * when Supabase is not configured. Everything else is read from here.
  * To reuse the template for a new clinic, edit this file only.
  *
  * DEMO DATA: the clinic, people, prices, reviews and ratings are fictional
@@ -576,10 +577,6 @@ export const shortName = (d: Dentist) => {
   return parts[0] === "Dr" ? `Dr ${parts[parts.length - 1]}` : parts[0];
 };
 
-export const getService = (slug: string) => services.find((s) => s.slug === slug);
-
-export const getDentist = (slug: string) => dentists.find((d) => d.slug === slug);
-
 export const maxPrice = (s: Service) => Math.max(...Object.values(s.prices));
 
 /** Finance applies only to eligible services at or above the minimum spend. */
@@ -618,11 +615,14 @@ export const formatPrice = (pence: number) =>
 
 export const fromPrice = (s: Service) => Math.min(...Object.values(s.prices));
 
-export const dentistsForService = (s: Service) =>
-  dentists.filter((d) => d.slug in s.prices);
+// Pages read dentists and services through src/lib/data.ts (Supabase with a
+// config fallback), then pass the lists to these pure helpers.
 
-export const servicesForDentist = (d: Dentist) =>
-  services.filter((s) => d.slug in s.prices);
+export const dentistsForService = (s: Service, all: Dentist[]) =>
+  all.filter((d) => d.slug in s.prices);
+
+export const servicesForDentist = (d: Dentist, all: Service[]) =>
+  all.filter((s) => d.slug in s.prices);
 
 export const monthlyFinance = (pence: number, months: number) =>
   Math.ceil(pence / months);

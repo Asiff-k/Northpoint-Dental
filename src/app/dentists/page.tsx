@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { clinic, dentists } from "@/config/clinic.config";
+import { clinic } from "@/config/clinic.config";
 import { Container } from "@/components/ui/section";
 import { DentistCard } from "@/components/sections/dentist-card";
 import { FinalCta } from "@/components/sections/final-cta";
 import { PageHero } from "@/components/sections/page-hero";
 import { RegulatorBadges } from "@/components/sections/regulator-badges";
+import { getDentists } from "@/lib/data";
 
 export function generateMetadata(): Metadata {
   return {
@@ -13,7 +14,9 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function DentistsPage() {
+export default async function DentistsPage() {
+  const dentists = await getDentists();
+
   return (
     <>
       <PageHero

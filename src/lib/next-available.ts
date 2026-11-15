@@ -1,4 +1,4 @@
-import { clinic, dentists, type Dentist } from "@/config/clinic.config";
+import { clinic, type Dentist } from "@/config/clinic.config";
 import {
   clinicClock,
   clinicDay,
@@ -82,8 +82,8 @@ export function placeholderNextSlots(
 export const placeholderNextAvailable = (dentist: Dentist, now: Date) =>
   placeholderNextSlots(dentist, now, 1)[0];
 
-/** Earliest placeholder slot across the given dentists (default: everyone). */
-export function placeholderEarliest(now: Date, among: Dentist[] = dentists) {
+/** Earliest placeholder slot across the given dentists. */
+export function placeholderEarliest(now: Date, among: Dentist[]) {
   let best: PlaceholderSlot | undefined;
   for (const dentist of among) {
     const slot = placeholderNextAvailable(dentist, now);

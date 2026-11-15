@@ -34,7 +34,7 @@ export function DentistCard({ dentist }: { dentist: Dentist }) {
           className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
         />
         <NextAvailableChip
-          dentistSlug={dentist.slug}
+          dentist={dentist}
           className="absolute bottom-3 left-3 bg-card/95 shadow-soft backdrop-blur"
         />
       </div>

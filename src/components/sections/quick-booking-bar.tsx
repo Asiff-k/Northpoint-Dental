@@ -3,15 +3,11 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import {
-  dentists,
-  dentistsForService,
-  getService,
-  services,
-} from "@/config/clinic.config";
+import { dentistsForService } from "@/config/clinic.config";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Container } from "@/components/ui/section";
+import { useCatalogue } from "@/components/site/catalogue-provider";
 import {
   Select,
   SelectContent,
@@ -33,9 +29,10 @@ export function QuickBookingBar() {
   const [dentist, setDentist] = useState(ANY);
   const [date, setDate] = useState(ANY);
   const now = useNow();
+  const { dentists, services, getService } = useCatalogue();
 
   const selectedService = service === ANY ? undefined : getService(service);
-  const dentistOptions = selectedService ? dentistsForService(selectedService) : dentists;
+  const dentistOptions = selectedService ? dentistsForService(selectedService, dentists) : dentists;
   // Fall back to "First available" if the chosen dentist does not offer the service.
   const activeDentist = dentistOptions.some((d) => d.slug === dentist) ? dentist : ANY;
 

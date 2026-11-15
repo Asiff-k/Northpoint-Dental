@@ -6,9 +6,7 @@ import { Suspense } from "react";
 import { Award, Clock, Languages } from "lucide-react";
 import {
   clinic,
-  dentists,
   formatPrice,
-  getDentist,
   reviews,
   servicesForDentist,
   shortName,
@@ -18,21 +16,22 @@ import { Button } from "@/components/ui/button";
 import { SampleTag } from "@/components/ui/sample-tag";
 import { Container } from "@/components/ui/section";
 import { NextSlotChips } from "@/components/booking/next-available";
+import { getDentist, getDentists, getServices } from "@/lib/data";
 import { GdcNumber } from "@/components/sections/dentist-card";
 import { FinalCta } from "@/components/sections/final-cta";
 import { Breadcrumbs } from "@/components/sections/page-hero";
 import { DetailSkeleton } from "@/components/sections/page-skeleton";
 import { FinanceLine, MemberPrice } from "@/components/sections/price-text";
 
-export function generateStaticParams() {
-  return dentists.map((d) => ({ slug: d.slug }));
+export async function generateStaticParams() {
+  return (await getDentists()).map((d) => ({ slug: d.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/dentists/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const dentist = getDentist(slug);
+  const dentist = await getDentist(slug);
   if (!dentist) return { title: "Dentist not found" };
 
   return {
@@ -55,10 +54,10 @@ async function DentistDetail({
   params,
 }: Pick<PageProps<"/dentists/[slug]">, "params">) {
   const { slug } = await params;
-  const dentist = getDentist(slug);
+  const dentist = await getDentist(slug);
   if (!dentist) notFound();
 
-  const offered = servicesForDentist(dentist);
+  const offered = servicesForDentist(dentist, await getServices());
   const dentistReviews = reviews.filter((r) => r.dentistSlug === dentist.slug);
   const short = shortName(dentist);
 
@@ -123,7 +122,7 @@ async function DentistDetail({
                   Next appointments with {short}
                 </h2>
                 <div className="mt-4">
-                  <NextSlotChips dentistSlug={dentist.slug} />
+                  <NextSlotChips dentist={dentist} />
                 </div>
                 <p className="mt-4 text-sm text-muted-foreground">
                   Usually in clinic{" "}

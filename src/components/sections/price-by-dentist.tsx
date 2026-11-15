@@ -9,10 +9,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { NextAvailableChip } from "@/components/booking/next-available";
 import { FinanceLine, MemberPrice } from "@/components/sections/price-text";
+import { getDentists } from "@/lib/data";
 
 /** Price per dentist: a table on desktop, one card per dentist on mobile. */
-export function PriceByDentist({ service }: { service: Service }) {
-  const rows = dentistsForService(service);
+export async function PriceByDentist({ service }: { service: Service }) {
+  const rows = dentistsForService(service, await getDentists());
   const bookHref = (dentistSlug: string) =>
     `/book?service=${service.slug}&dentist=${dentistSlug}`;
 
@@ -62,7 +63,7 @@ export function PriceByDentist({ service }: { service: Service }) {
                     <MemberPrice service={service} />
                   </td>
                   <td className="px-4 py-4">
-                    <NextAvailableChip dentistSlug={d.slug} />
+                    <NextAvailableChip dentist={d} />
                   </td>
                   <td className="px-5 py-4 text-right">
                     <Button asChild size="sm" className="h-10">
@@ -109,7 +110,7 @@ export function PriceByDentist({ service }: { service: Service }) {
                 </div>
                 <div className="flex items-center justify-between gap-3">
                   <dt className="text-muted-foreground">Next free slot</dt>
-                  <dd><NextAvailableChip dentistSlug={d.slug} /></dd>
+                  <dd><NextAvailableChip dentist={d} /></dd>
                 </div>
               </dl>
               <FinanceLine service={service} pence={price} className="mt-3 block" />

@@ -3,7 +3,6 @@ import {
   categoryLabels,
   clinic,
   formatPrice,
-  services,
   type ServiceCategory,
 } from "@/config/clinic.config";
 import { Container, SectionHeading } from "@/components/ui/section";
@@ -14,6 +13,7 @@ import { MembershipCard } from "@/components/sections/membership-card";
 import { PageHero } from "@/components/sections/page-hero";
 import { PriceMatrix } from "@/components/sections/price-matrix";
 import { RegulatorBadges } from "@/components/sections/regulator-badges";
+import { getServices } from "@/lib/data";
 
 export function generateMetadata(): Metadata {
   return {
@@ -25,7 +25,8 @@ export function generateMetadata(): Metadata {
 const triggerClass =
   "h-11 flex-none rounded-full px-4 text-sm font-semibold text-primary/80 hover:text-primary data-active:bg-primary data-active:text-white data-active:shadow-none";
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const services = await getServices();
   const categories = (Object.keys(categoryLabels) as ServiceCategory[]).filter((c) =>
     services.some((s) => s.category === c),
   );

@@ -37,9 +37,19 @@ Premium UK dental clinic website template: AI booking assistant, in-site booking
 
 Tips: run `/clear` between phases, start each in plan mode (Shift+Tab), and deploy to Vercel after Phase 1 so you have a live link to show prospects early.
 
+## Database (Phase 2)
+
+Dentists, services, prices and availability are read from Supabase through `src/lib/data.ts`. With no Supabase keys in `.env.local` the site falls back to `src/config/clinic.config.ts`, so it still runs offline.
+
+1. Create a Supabase project in an EU/UK region. Copy the URL, anon key and service role key into `.env.local`, and set `REVALIDATE_SECRET` to any long random string.
+2. Apply the schema: paste `supabase/migrations/0001_init.sql` into the Supabase SQL editor and run it (or `npx supabase link` then `npx supabase db push`).
+3. Seed from the config: `npm run seed`. Safe to re-run. It resets catalogue values to the config and never touches bookings.
+4. After changing a price in Supabase, refresh the cached pages:
+   `curl -X POST -H "Authorization: Bearer <REVALIDATE_SECRET>" http://localhost:3000/api/revalidate`
+
 ## Reusing for a new clinic
 
-Edit `src/config/clinic.config.ts` (name, address, dentists, services, prices, hours, offers), swap images, re-run the seed script (after Phase 2). Remove every `isSample` review and rating before a real client goes live.
+Edit `src/config/clinic.config.ts` (name, address, dentists, services, prices, hours, offers), swap images, re-run `npm run seed`. Remove every `isSample` review and rating before a real client goes live.
 
 ## Files that steer Claude Code
 

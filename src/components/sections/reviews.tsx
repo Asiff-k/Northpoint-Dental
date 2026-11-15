@@ -2,15 +2,17 @@
 
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import { getDentist, reviews } from "@/config/clinic.config";
+import { reviews } from "@/config/clinic.config";
 import { Button } from "@/components/ui/button";
 import { SampleTag } from "@/components/ui/sample-tag";
 import { Container, SectionHeading } from "@/components/ui/section";
+import { useCatalogue } from "@/components/site/catalogue-provider";
 import { RatingBadge } from "@/components/site/rating-badge";
 
 /** Review carousel on CSS scroll-snap. Buttons scroll by one card. */
 export function Reviews() {
   const track = useRef<HTMLUListElement>(null);
+  const { getDentist } = useCatalogue();
 
   const scrollByCard = (direction: 1 | -1) => {
     const el = track.current;

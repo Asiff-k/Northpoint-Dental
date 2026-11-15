@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { dentists } from "@/config/clinic.config";
 import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/ui/fade-in";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { DentistCard } from "@/components/sections/dentist-card";
+import { getDentists } from "@/lib/data";
 
-export function DentistsGrid() {
+export async function DentistsGrid() {
+  const dentists = await getDentists();
+
   return (
     <Section id="dentists" className="bg-card">
       <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">

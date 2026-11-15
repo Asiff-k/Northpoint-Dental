@@ -2,18 +2,14 @@
 
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, ChevronUp, Info, Phone } from "lucide-react";
 import {
   categoryLabels,
   clinic,
-  dentists,
   dentistsForService,
   formatPrice,
   fromPrice,
-  getDentist,
-  getService,
-  services,
   type Dentist,
   type ServiceCategory,
 } from "@/config/clinic.config";
@@ -30,6 +26,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
+import { useCatalogue } from "@/components/site/catalogue-provider";
 import { placeholderSlotsForDay } from "@/lib/next-available";
 import { clinicClock, clinicDay, relativeDayLabel } from "@/lib/time";
 import { useNow } from "@/lib/use-now";
@@ -56,6 +53,7 @@ interface Initial {
 
 export function BookingWizard() {
   const params = useSearchParams();
+  const { getDentist, getService } = useCatalogue();
   const consultation = clinic.offers.freeConsultation;
 
   const serviceParam = params.get("service");
@@ -76,15 +74,19 @@ export function BookingWizard() {
   return <Wizard key={params.toString()} initial={initial} />;
 }
 
-function eligibleDentists(serviceSlug: string | null): Dentist[] {
-  if (!serviceSlug || serviceSlug === CONSULTATION) return dentists;
-  const service = getService(serviceSlug);
-  return service ? dentistsForService(service) : dentists;
-}
-
 function Wizard({ initial }: { initial: Initial }) {
   const consultation = clinic.offers.freeConsultation;
   const now = useNow();
+  const { dentists, services, getDentist, getService } = useCatalogue();
+
+  const eligibleDentists = useCallback(
+    (slug: string | null): Dentist[] => {
+      if (!slug || slug === CONSULTATION) return dentists;
+      const chosen = services.find((s) => s.slug === slug);
+      return chosen ? dentistsForService(chosen, dentists) : dentists;
+    },
+    [dentists, services],
+  );
 
   // A preselected dentist only sticks if they offer the preselected service.
   const initialDentist =
@@ -140,7 +142,7 @@ function Wizard({ initial }: { initial: Initial }) {
       }
       return { day: clinicDay(clock, offset), times: [...times].sort() };
     });
-  }, [now, dentistSlug, serviceSlug]);
+  }, [now, dentistSlug, serviceSlug, dentists, eligibleDentists]);
 
   const selectedDay = days.find((d) => d.day.iso === dayIso);
   const validTime = selectedDay?.times.includes(time ?? "") ? time : null;

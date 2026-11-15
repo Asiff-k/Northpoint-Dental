@@ -8,8 +8,6 @@ import {
   clinic,
   formatPrice,
   fromPrice,
-  getService,
-  services,
   type Service,
 } from "@/config/clinic.config";
 import { serviceContent } from "@/config/service-content";
@@ -26,17 +24,18 @@ import { PriceByDentist } from "@/components/sections/price-by-dentist";
 import { FinanceLine } from "@/components/sections/price-text";
 import { RegulatorBadges } from "@/components/sections/regulator-badges";
 import { ServiceCard } from "@/components/sections/service-card";
+import { getService, getServices } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-export function generateStaticParams() {
-  return services.map((s) => ({ slug: s.slug }));
+export async function generateStaticParams() {
+  return (await getServices()).map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/services/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const service = getService(slug);
+  const service = await getService(slug);
   if (!service) return { title: "Service not found" };
 
   return {
@@ -59,13 +58,13 @@ async function ServiceDetail({
   params,
 }: Pick<PageProps<"/services/[slug]">, "params">) {
   const { slug } = await params;
-  const service = getService(slug);
+  const [service, services] = await Promise.all([getService(slug), getServices()]);
   const content = serviceContent[slug];
   if (!service || !content) notFound();
 
   const from = fromPrice(service);
   const related = content.related
-    .map(getService)
+    .map((related) => services.find((s) => s.slug === related))
     .filter((s): s is Service => Boolean(s));
 
   return (

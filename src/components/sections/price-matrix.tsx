@@ -1,18 +1,20 @@
 import Link from "next/link";
 import {
-  dentists,
   formatPrice,
   fromPrice,
   type Service,
 } from "@/config/clinic.config";
 import { Button } from "@/components/ui/button";
 import { FinanceLine, MemberPrice } from "@/components/sections/price-text";
+import { getDentists } from "@/lib/data";
 
 /**
  * Fee guide: services by dentists with a Member column.
  * Desktop shows the matrix, mobile shows one card per service.
  */
-export function PriceMatrix({ services }: { services: Service[] }) {
+export async function PriceMatrix({ services }: { services: Service[] }) {
+  const dentists = await getDentists();
+
   return (
     <div>
       {/* Desktop matrix */}

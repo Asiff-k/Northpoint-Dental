@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { fromPrice, maxPrice, services } from "@/config/clinic.config";
+import { fromPrice, maxPrice } from "@/config/clinic.config";
 import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/ui/fade-in";
 import { Icon } from "@/components/ui/icon";
@@ -8,10 +8,11 @@ import { Section, SectionHeading } from "@/components/ui/section";
 import { MembershipCard } from "@/components/sections/membership-card";
 import { FinanceLine, priceRangeText } from "@/components/sections/price-text";
 import { RegulatorBadges } from "@/components/sections/regulator-badges";
+import { getServices } from "@/lib/data";
 
 /** Five popular treatments with price ranges, plus the membership card. */
-export function PricingPreview() {
-  const popular = services.filter((s) => s.popular).slice(0, 5);
+export async function PricingPreview() {
+  const popular = (await getServices()).filter((s) => s.popular).slice(0, 5);
 
   return (
     <Section id="pricing" className="bg-card">

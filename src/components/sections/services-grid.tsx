@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { services } from "@/config/clinic.config";
 import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/ui/fade-in";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { ServiceCard } from "@/components/sections/service-card";
+import { getServices } from "@/lib/data";
 
 /** Homepage: eight services, popular first. */
-export function ServicesGrid() {
+export async function ServicesGrid() {
+  const services = await getServices();
   const featured = [
     ...services.filter((s) => s.popular),
     ...services.filter((s) => !s.popular),

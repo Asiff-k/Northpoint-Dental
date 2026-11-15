@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import {
   categoryLabels,
   clinic,
-  services,
   type ServiceCategory,
 } from "@/config/clinic.config";
 import { Container } from "@/components/ui/section";
@@ -10,6 +9,7 @@ import { FinalCta } from "@/components/sections/final-cta";
 import { PageHero } from "@/components/sections/page-hero";
 import { RegulatorBadges } from "@/components/sections/regulator-badges";
 import { ServiceCard } from "@/components/sections/service-card";
+import { getServices } from "@/lib/data";
 
 export function generateMetadata(): Metadata {
   return {
@@ -18,7 +18,8 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const services = await getServices();
   const categories = (Object.keys(categoryLabels) as ServiceCategory[]).filter((c) =>
     services.some((s) => s.category === c),
   );

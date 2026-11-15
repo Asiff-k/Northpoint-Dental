@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { Clock } from "lucide-react";
-import { getDentist, shortName } from "@/config/clinic.config";
+import { shortName, type Dentist } from "@/config/clinic.config";
+import { useCatalogue } from "@/components/site/catalogue-provider";
 import {
   placeholderEarliest,
   placeholderNextAvailable,
@@ -20,15 +21,14 @@ import { cn } from "@/lib/utils";
 
 /** Small "Next: Today 15:45" chip for dentist cards and price tables. */
 export function NextAvailableChip({
-  dentistSlug,
+  dentist,
   className,
 }: {
-  dentistSlug: string;
+  dentist: Dentist;
   className?: string;
 }) {
   const now = useNow();
-  const dentist = getDentist(dentistSlug);
-  const slot = now && dentist ? placeholderNextAvailable(dentist, now) : null;
+  const slot = now ? placeholderNextAvailable(dentist, now) : null;
 
   return (
     <span
@@ -53,7 +53,11 @@ export function NextAvailableChip({
 /** Hero floating card: "Next available: Today 15:45 with Dr Patel". */
 export function NextAvailableCard({ className }: { className?: string }) {
   const now = useNow();
-  const slot = useMemo(() => (now ? placeholderEarliest(now) : null), [now]);
+  const { dentists, getDentist } = useCatalogue();
+  const slot = useMemo(
+    () => (now ? placeholderEarliest(now, dentists) : null),
+    [now, dentists],
+  );
   const dentist = slot ? getDentist(slot.dentistSlug) : null;
 
   const body = (
@@ -92,16 +96,15 @@ export function NextAvailableCard({ className }: { className?: string }) {
 
 /** Dentist profile: the next few free slots as one-click chips. */
 export function NextSlotChips({
-  dentistSlug,
+  dentist,
   count = 5,
 }: {
-  dentistSlug: string;
+  dentist: Dentist;
   count?: number;
 }) {
   const now = useNow();
-  const dentist = getDentist(dentistSlug);
   const slots = useMemo(
-    () => (now && dentist ? placeholderNextSlots(dentist, now, count) : null),
+    () => (now ? placeholderNextSlots(dentist, now, count) : null),
     [now, dentist, count],
   );
 
